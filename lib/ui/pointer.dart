@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-// @dart = 2.6
+// @dart = 2.9
+
 part of dart.ui;
 
 /// How the pointer has changed since the last report.
@@ -111,7 +112,7 @@ class PointerData {
   final PointerDeviceKind kind;
 
   /// The kind of signal for a pointer signal event.
-  final PointerSignalKind signalKind;
+  final PointerSignalKind? signalKind;
 
   /// Unique identifier for the pointing device, reused across interactions.
   final int device;
@@ -296,7 +297,7 @@ class PointerData {
 /// A sequence of reports about the state of pointers.
 class PointerDataPacket {
   /// Creates a packet of pointer data reports.
-  const PointerDataPacket({ this.data = const <PointerData>[] });
+  const PointerDataPacket({ this.data = const <PointerData>[] }) : assert(data != null); // ignore: unnecessary_null_comparison
 
   /// Data about the individual pointers in this packet.
   ///

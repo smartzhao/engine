@@ -7,6 +7,7 @@
 
 #include <vector>
 
+#include "flutter/flow/surface_frame.h"
 #include "flutter/fml/memory/ref_counted.h"
 #include "flutter/fml/raster_thread_merger.h"
 #include "third_party/skia/include/core/SkCanvas.h"
@@ -226,9 +227,11 @@ class ExternalViewEmbedder {
   // sets the stage for the next pre-roll.
   virtual void CancelFrame() = 0;
 
-  virtual void BeginFrame(SkISize frame_size,
-                          GrContext* context,
-                          double device_pixel_ratio) = 0;
+  virtual void BeginFrame(
+      SkISize frame_size,
+      GrContext* context,
+      double device_pixel_ratio,
+      fml::RefPtr<fml::RasterThreadMerger> raster_thread_merger) = 0;
 
   virtual void PrerollCompositeEmbeddedView(
       int view_id,
@@ -248,10 +251,13 @@ class ExternalViewEmbedder {
   // Must be called on the UI thread.
   virtual SkCanvas* CompositeEmbeddedView(int view_id) = 0;
 
-  virtual bool SubmitFrame(GrContext* context, SkCanvas* background_canvas);
-
-  // This is called after submitting the embedder frame and the surface frame.
-  virtual void FinishFrame();
+  // Implementers must submit the frame by calling frame.Submit().
+  //
+  // This method can mutate the root Skia canvas before submitting the frame.
+  //
+  // It can also allocate frames for overlay surfaces to compose hybrid views.
+  virtual bool SubmitFrame(GrContext* context,
+                           std::unique_ptr<SurfaceFrame> frame);
 
   // This should only be called after |SubmitFrame|.
   // This method provides the embedder a way to do additional tasks after

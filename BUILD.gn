@@ -82,7 +82,10 @@ group("flutter") {
     if (!is_win) {
       public_deps += [
         "//flutter/fml:fml_benchmarks",
+        "//flutter/lib/ui:ui_benchmarks",
         "//flutter/shell/common:shell_benchmarks",
+        "//flutter/shell/platform/android/external_view_embedder:android_external_view_embedder_unittests",
+        "//flutter/shell/platform/android/jni:jni_unittests",
         "//flutter/third_party/txt:txt_benchmarks",
       ]
     }
@@ -104,6 +107,10 @@ group("flutter") {
           "//flutter/shell/platform/windows:flutter_windows_unittests",
           "//flutter/shell/platform/windows/client_wrapper:client_wrapper_windows_unittests",
         ]
+      }
+      if (is_linux) {
+        public_deps +=
+            [ "//flutter/shell/platform/linux:flutter_linux_unittests" ]
       }
     }
   }

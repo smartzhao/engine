@@ -6,9 +6,11 @@ namespace flutter {
 void ShellTestExternalViewEmbedder::CancelFrame() {}
 
 // |ExternalViewEmbedder|
-void ShellTestExternalViewEmbedder::BeginFrame(SkISize frame_size,
-                                               GrContext* context,
-                                               double device_pixel_ratio) {}
+void ShellTestExternalViewEmbedder::BeginFrame(
+    SkISize frame_size,
+    GrContext* context,
+    double device_pixel_ratio,
+    fml::RefPtr<fml::RasterThreadMerger> raster_thread_merger) {}
 
 // |ExternalViewEmbedder|
 void ShellTestExternalViewEmbedder::PrerollCompositeEmbeddedView(
@@ -33,13 +35,11 @@ SkCanvas* ShellTestExternalViewEmbedder::CompositeEmbeddedView(int view_id) {
 }
 
 // |ExternalViewEmbedder|
-bool ShellTestExternalViewEmbedder::SubmitFrame(GrContext* context,
-                                                SkCanvas* background_canvas) {
-  return true;
+bool ShellTestExternalViewEmbedder::SubmitFrame(
+    GrContext* context,
+    std::unique_ptr<SurfaceFrame> frame) {
+  return frame->Submit();
 }
-
-// |ExternalViewEmbedder|
-void ShellTestExternalViewEmbedder::FinishFrame() {}
 
 // |ExternalViewEmbedder|
 void ShellTestExternalViewEmbedder::EndFrame(

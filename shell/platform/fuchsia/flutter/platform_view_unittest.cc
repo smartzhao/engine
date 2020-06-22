@@ -74,6 +74,13 @@ class MockPlatformViewDelegate : public flutter::PlatformView::Delegate {
   void OnPlatformViewUnregisterTexture(int64_t texture_id) {}
   // |flutter::PlatformView::Delegate|
   void OnPlatformViewMarkTextureFrameAvailable(int64_t texture_id) {}
+  // |flutter::PlatformView::Delegate|
+  std::unique_ptr<std::vector<std::string>> ComputePlatformViewResolvedLocale(
+      const std::vector<std::string>& supported_locale_data) {
+    std::unique_ptr<std::vector<std::string>> out =
+        std::make_unique<std::vector<std::string>>();
+    return out;
+  }
 
   bool SemanticsEnabled() const { return semantics_enabled_; }
   int32_t SemanticsFeatures() const { return semantics_features_; }
@@ -110,7 +117,8 @@ TEST_F(PlatformViewTests, ChangesAccessibilitySettings) {
       nullptr,  // session_metrics_did_change_callback
       nullptr,  // session_size_change_hint_callback
       nullptr,  // on_enable_wireframe_callback,
-      0u        // vsync_event_handle
+      0u,       // vsync_event_handle
+      {}        // product_config
   );
 
   RunLoopUntilIdle();
@@ -162,7 +170,8 @@ TEST_F(PlatformViewTests, EnableWireframeTest) {
       nullptr,                  // session_metrics_did_change_callback
       nullptr,                  // session_size_change_hint_callback
       EnableWireframeCallback,  // on_enable_wireframe_callback,
-      0u                        // vsync_event_handle
+      0u,                       // vsync_event_handle
+      {}                        // product_config
   );
 
   // Cast platform_view to its base view so we can have access to the public
